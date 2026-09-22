@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Chewy Stock">
+<meta name="theme-color" content="#eaeef2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1216" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Chewy Stock Watch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eaeef2; --surface:#fff; --surface-2:#f5f8fa; --sunk:#e3e9ee;
+  --line:#d3dbe3; --line-soft:#e6ecf1;
+  --ink:#0d161d; --ink-2:#3e5466; --mut:#6d8395;
+  --accent:#2c6c8c;
+  --red:#b3352a; --amber:#9c6400; --green:#0f7455;
+  --red-w:rgba(179,53,42,.11); --amber-w:rgba(156,100,0,.13); --green-w:rgba(15,116,85,.11);
+  --shadow:0 1px 2px rgba(13,22,29,.06), 0 8px 24px -18px rgba(13,22,29,.45);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0d1216; --surface:#161d24; --surface-2:#1b242c; --sunk:#111920;
+  --line:#2a353f; --line-soft:#202a32;
+  --ink:#e9eff4; --ink-2:#adc0d0; --mut:#7e93a5;
+  --accent:#6fb8da;
+  --red:#f07565; --amber:#e0a12f; --green:#45c399;
+  --red-w:rgba(240,117,101,.13); --amber-w:rgba(224,161,47,.14); --green-w:rgba(69,195,153,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -20px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1216; --surface:#161d24; --surface-2:#1b242c; --sunk:#111920;
+  --line:#2a353f; --line-soft:#202a32;
+  --ink:#e9eff4; --ink-2:#adc0d0; --mut:#7e93a5;
+  --accent:#6fb8da;
+  --red:#f07565; --amber:#e0a12f; --green:#45c399;
+  --red-w:rgba(240,117,101,.13); --amber-w:rgba(224,161,47,.14); --green-w:rgba(69,195,153,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -20px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font:400 15px/1.5 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased; padding:0 0 44px;
+}
+.wrap{max-width:640px; margin:0 auto; padding:0 14px}
+h1,h2,h3{margin:0; text-wrap:balance}
+p{margin:0}
+.num{font-family:"Barlow Semi Condensed",Impact,sans-serif; font-variant-numeric:tabular-nums}
+.lab{font-size:10.5px; font-weight:600; letter-spacing:.11em; text-transform:uppercase; color:var(--mut)}
+
+header{display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  padding:20px 0 12px; flex-wrap:wrap}
+header h1{font-family:"Barlow Semi Condensed",sans-serif; font-weight:700; font-size:24px; line-height:1}
+header h1 span{color:var(--mut); font-weight:500}
+.stamp{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--mut)}
+.stamp .pip{width:7px; height:7px; border-radius:50%; background:var(--green); flex:none;
+  box-shadow:0 0 0 3px var(--green-w)}
+.stamp[data-age="ok"] .pip{background:var(--mut); box-shadow:0 0 0 3px rgba(109,131,149,.16)}
+.stamp[data-age="stale"] .pip{background:var(--amber); box-shadow:0 0 0 3px var(--amber-w)}
+.stamp[data-age="old"] .pip{background:var(--red); box-shadow:0 0 0 3px var(--red-w)}
+.stamp[data-age="stale"] span:last-child,.stamp[data-age="old"] span:last-child{color:var(--red); font-weight:600}
+
+/* verdict */
+.verdict{background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  box-shadow:var(--shadow); overflow:hidden}
+.verdict .body{padding:15px 17px 16px}
+.verdict .big{font-family:"Barlow Semi Condensed",sans-serif; font-weight:700; font-size:56px;
+  line-height:.9; font-variant-numeric:tabular-nums; margin:5px 0 4px}
+.verdict .big.neg{color:var(--red)}
+.verdict .body small{font-size:12.5px; color:var(--mut)}
+.alarm{display:flex; gap:9px; align-items:baseline; padding:9px 17px; font-size:12.5px;
+  border-top:1px solid var(--line-soft); background:var(--red-w)}
+.alarm.warn{background:var(--amber-w)} .alarm.calm{background:var(--green-w)}
+.alarm .mk{font-weight:700; color:var(--red); flex:none; letter-spacing:.07em; font-size:10.5px}
+.alarm.warn .mk{color:var(--amber)} .alarm.calm .mk{color:var(--green)}
+.alarm span:last-child{color:var(--ink-2)}
+
+/* stat strip */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:12px;
+  background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+.stats div{background:var(--surface); padding:10px 11px 11px}
+.stats .v{font-family:"Barlow Semi Condensed",sans-serif; font-weight:600; font-size:23px;
+  line-height:1.1; font-variant-numeric:tabular-nums; margin-top:1px}
+.stats .v.hot{color:var(--red)}
+.stats small{font-size:11px; color:var(--mut); display:block; margin-top:1px}
+
+/* section head */
+.sec{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:24px 0 7px}
+
+/* stock rows */
+.list{background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  box-shadow:var(--shadow); overflow:hidden}
+.item{position:relative; border-top:1px solid var(--line-soft)}
+.item:first-child{border-top:0}
+.item::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--green)}
+.item[data-s="RED"]::before{background:var(--red)}
+.item[data-s="AMBER"]::before{background:var(--amber)}
+.item[data-s="UNKNOWN"]::before{background:var(--mut)}
+.item summary{list-style:none; cursor:pointer; padding:12px 14px 13px 17px;
+  display:flex; align-items:center; justify-content:space-between; gap:14px}
+.item summary::-webkit-details-marker{display:none}
+.item summary:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+.left b{font-family:"Barlow Semi Condensed",sans-serif; font-weight:600; font-size:29px;
+  line-height:1; font-variant-numeric:tabular-nums; display:block}
+.left span{font-size:12.5px; color:var(--mut); display:block; margin-top:3px}
+.right{text-align:right; flex:none}
+.right em{font-style:normal; font-size:15px; font-weight:600; font-variant-numeric:tabular-nums;
+  display:block; margin-top:2px}
+.item[data-s="RED"] .right em{color:var(--red)}
+.item[data-s="AMBER"] .right em{color:var(--amber)}
+.detail{margin:0; padding:0 14px 14px 17px; display:grid; grid-template-columns:auto 1fr;
+  gap:4px 14px; font-size:12.5px; border-top:1px dashed var(--line-soft); padding-top:10px}
+.detail dt{color:var(--mut)}
+.detail dd{margin:0; font-variant-numeric:tabular-nums; text-align:right}
+.detail dd.note{text-align:left; grid-column:1/-1; color:var(--mut); line-height:1.45; margin-top:2px}
+
+/* incoming */
+.inbound{background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  box-shadow:var(--shadow); overflow:hidden}
+.grp{border-top:1px solid var(--line-soft)}
+.grp:first-child{border-top:0}
+.grp .when{display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  padding:9px 14px 7px; background:var(--surface-2)}
+.grp .when b{font-size:13.5px; font-weight:600}
+.grp .when span{font-size:11.5px; color:var(--mut); font-variant-numeric:tabular-nums}
+.ln{display:flex; align-items:baseline; gap:12px; padding:7px 14px}
+.ln + .ln{padding-top:0}
+.ln:last-child{padding-bottom:11px}
+.ln b{font-family:"Barlow Semi Condensed",sans-serif; font-weight:600; font-size:19px;
+  font-variant-numeric:tabular-nums; min-width:62px; text-align:right; flex:none}
+.ln span{font-size:13px; color:var(--ink-2)}
+.ln i{font-style:normal; font-size:11px; color:var(--mut)}
+.empty{padding:14px; font-size:13px; color:var(--mut); text-align:center}
+
+/* drift + footer */
+.drift{display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:baseline;
+  margin-top:12px; background:var(--amber-w); border-radius:3px; padding:9px 12px;
+  font-size:12px; line-height:1.45; color:var(--ink-2)}
+.drift .mk{font-size:10px; font-weight:700; letter-spacing:.08em; color:var(--amber)}
+footer{margin-top:18px; padding-top:12px; border-top:1px solid var(--line);
+  font-size:11px; color:var(--mut); line-height:1.6}
+@media (max-width:400px){
+  .verdict .big{font-size:46px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div:last-child{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:no-preference){ .item summary{transition:background .15s} }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Chewy <span>Stock Watch</span></h1>
+    <div class="stamp" id="stamp" data-age="ok"><span class="pip"></span><span id="stampText">reading&hellip;</span></div>
+  </header>
+
+  <section class="verdict">
+    <div class="body">
+      <p class="lab">Free for new orders</p>
+      <p class="big num" id="freeNum">&mdash;</p>
+      <small id="freeSub">Waiting for the first snapshot.</small>
+    </div>
+    <div id="alarms"></div>
+  </section>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="sec"><h2 class="lab">Stock</h2><span class="lab" id="stockNote"></span></div>
+  <div class="list" id="list"></div>
+
+  <div class="sec"><h2 class="lab">Incoming</h2><span class="lab" id="inNote"></span></div>
+  <div class="inbound" id="inbound"></div>
+
+  <div id="drift"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Baked first paint: the snapshot as it stood when this page was published.
+  // The db copy wins the moment it arrives; this only stops the page opening
+  // blank, and it carries its own timestamp so stale reads as stale.
+  var SEED = {"ok":true,"generated_at":"2026-09-22T14:44:39.320770+10:00","sources":"Floship GET /api/v2/products/ + Shopify GraphQL orders (last 28d) + stock_model.json","demand_window":{"from":"2026-08-25","to":"2026-09-21"},"items":[{"sku":"CHEWY-GUM","label":"Gummy pouches (filled)","unit":"units","muted":false,"no_reorder":false,"lead_days":17,"lead_assumed":false,"status":"RED","available":1026,"on_hand":1249,"reserved":199,"held":1066,"held_note":"1,066 until 2026-09-30 (repackaging - exact count 1,066 confirmed by Jack 2026-09-01; earliest back end of Sep)","on_order":8000,"burn":159.0,"days_cover":0,"stockout":"2026-09-22","first_supply":"2026-09-29","pay_by":"2026-08-22","days_to_pay_by":-31,"suggested_qty":11703,"planned_order_qty":5000,"planned_qty_lasts_until":"2026-12-06"},{"sku":"CHEWY-PU-L","label":"Gift underwear L","unit":"units","muted":true,"no_reorder":false,"lead_days":17,"lead_assumed":true,"status":"RED","available":0,"on_hand":0,"reserved":0,"held":0,"held_note":null,"on_order":350,"burn":0.0,"days_cover":0,"stockout":"2026-09-22","first_supply":"2026-10-10","pay_by":"2026-08-22","days_to_pay_by":-31,"suggested_qty":0,"planned_order_qty":null,"planned_qty_lasts_until":null,"pull":{"days":7,"floor":0,"hit":true,"gone":true}},{"sku":"CHEWY-PU-S","label":"Gift underwear S","unit":"units","muted":true,"no_reorder":false,"lead_days":17,"lead_assumed":true,"status":"RED","available":21,"on_hand":39,"reserved":18,"held":0,"held_note":null,"on_order":800,"burn":0.0,"days_cover":10,"stockout":"2026-10-02","first_supply":"2026-10-10","pay_by":"2026-09-01","days_to_pay_by":-21,"suggested_qty":1955,"planned_order_qty":null,"planned_qty_lasts_until":null,"pull":{"days":7,"floor":0,"hit":false,"gone":false}},{"sku":"CHEWY-PU-M","label":"Gift underwear M","unit":"units","muted":true,"no_reorder":false,"lead_days":17,"lead_assumed":true,"status":"RED","available":45,"on_hand":86,"reserved":41,"held":0,"held_note":null,"on_order":850,"burn":0.0,"days_cover":12,"stockout":"2026-10-04","first_supply":"2026-10-10","pay_by":"2026-09-03","days_to_pay_by":-19,"suggested_qty":2056,"planned_order_qty":null,"planned_qty_lasts_until":null,"pull":{"days":7,"floor":0,"hit":false,"gone":false}},{"sku":"CARE-POUCH","label":"Period care pouch (insert)","unit":"units","muted":false,"no_reorder":true,"lead_days":0,"lead_assumed":false,"status":"GREEN","available":256,"on_hand":256,"reserved":0,"held":0,"held_note":null,"on_order":2000,"burn":63.0,"days_cover":15,"stockout":"2026-10-07","first_supply":"2026-10-10","pay_by":null,"days_to_pay_by":null,"suggested_qty":null,"planned_order_qty":null,"planned_qty_lasts_until":null,"manual":{"batch":500,"packed":244,"level":256,"start":"2026-09-03","error":null}},{"sku":"CartonBox-1","label":"Shipping boxes","unit":"units","muted":false,"no_reorder":false,"lead_days":17,"lead_assumed":false,"status":"GREEN","available":937,"on_hand":937,"reserved":0,"held":0,"held_note":null,"on_order":4000,"burn":63.0,"days_cover":89,"stockout":"2026-12-20","first_supply":"2026-09-26","pay_by":"2026-11-19","days_to_pay_by":58,"suggested_qty":1074,"planned_order_qty":5000,"planned_qty_lasts_until":null}],"incoming":[{"sku":"CartonBox-1","label":"Shipping boxes","qty":4000,"eta":"2026-09-26","kind":"order","eta_source":"derived","days":4,"lead_assumed":false},{"sku":"CHEWY-GUM","label":"Gummy pouches (filled)","qty":8000,"eta":"2026-09-29","kind":"order","eta_source":"quoted","days":7,"lead_assumed":false},{"sku":"CHEWY-GUM","label":"Gummy pouches (filled)","qty":1066,"eta":"2026-09-30","kind":"hold","eta_source":"quoted","days":8,"note":"repackaging - exact count 1,066 confirmed by Jack 2026-09-01; earliest back end of Sep"},{"sku":"CARE-POUCH","label":"Period care pouch (insert)","qty":2000,"eta":"2026-10-10","kind":"order","eta_source":"quoted","days":18,"lead_assumed":false},{"sku":"CHEWY-PU-M","label":"Gift underwear M","qty":850,"eta":"2026-10-10","kind":"order","eta_source":"quoted","days":18,"lead_assumed":true},{"sku":"CHEWY-PU-S","label":"Gift underwear S","qty":800,"eta":"2026-10-10","kind":"order","eta_source":"quoted","days":18,"lead_assumed":true},{"sku":"CHEWY-PU-L","label":"Gift underwear L","qty":350,"eta":"2026-10-10","kind":"order","eta_source":"quoted","days":18,"lead_assumed":true}],"demand":{"new_orders_per_day":5.8,"reb_orders_per_day":3.2,"pouches_per_new_order":3.54,"pouches_per_reb_order":2.41,"avg7_pouches":30.1,"avg14_pouches":19.6,"avg28_pouches":46.3,"trend":"cooling"},"subscribers":{"active":443,"export":"SUBSCRIPTION_export_20260906044642763.csv","export_age_days":15,"rebill_pouches_14d":221},"drift":["CHEWY-GUM: Floship on-hand moved 26 in 3d but Shopify sold ~185 - check for miscounts/adjustments","CartonBox-1: Floship on-hand moved 0 in 3d but Shopify sold ~54 - check for miscounts/adjustments","CHEWY-PU-M: Floship on-hand moved 0 in 3d but Shopify sold ~33 - check for miscounts/adjustments"],"drift_checked":true,"drift_base":"2026-09-19","sub_schedule":"export","quiet_mode":true,"model":{"safety_days":14,"review_window_days":7,"coverage_days_target":90,"free_alert_pouches":25,"subscriber_reserve_until":"2026-09-30"},"plan_week":{"act_new":37,"plan_new":0.0,"days":7,"delta":0.0,"verdict":"on track"},"free_to_sell":{"free":-261,"reserve":221,"usable":-40,"until":"2026-10-06","days":-2610.0,"organic":45,"ads_free":-306,"alert_at":60,"cut_ads":true,"sold_out":true}};
+
+  var $ = function (id) { return document.getElementById(id); };
+  var AU = "en-AU", TZ = "Australia/Sydney";
+
+  function n(v) { return (v === null || v === undefined) ? "—" : Number(v).toLocaleString(AU); }
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function day(iso) {
+    if (!iso) return "—";
+    var p = String(iso).slice(0, 10).split("-");
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    if (isNaN(d)) return esc(iso);
+    return new Intl.DateTimeFormat(AU, { weekday: "short", day: "numeric", month: "short" }).format(d);
+  }
+  function clockOf(iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return esc(iso);
+    return new Intl.DateTimeFormat(AU, {
+      timeZone: TZ, day: "numeric", month: "short", hour: "numeric", minute: "2-digit", hour12: true
+    }).format(d).replace(/\s?(AM|PM)/i, function (m) { return m.trim().toLowerCase(); });
+  }
+  function ago(ms) {
+    var m = Math.max(0, Math.round(ms / 60000));
+    if (m < 2) return "just now";
+    if (m < 60) return m + "m ago";
+    var h = Math.floor(m / 60);
+    if (h < 24) return h + "h ago";
+    var d = Math.floor(h / 24);
+    return d + (d === 1 ? " day ago" : " days ago");
+  }
+  function inDays(d) {
+    if (d === null || d === undefined) return "";
+    if (d < 0) return Math.abs(d) + "d late";
+    if (d === 0) return "today";
+    if (d === 1) return "tomorrow";
+    return "in " + d + " days";
+  }
+
+  function paintStamp(s) {
+    var el = $("stamp"), t = $("stampText");
+    if (!s || !s.generated_at) { el.dataset.age = "old"; t.textContent = "no data"; return; }
+    var h = (Date.now() - new Date(s.generated_at).getTime()) / 3600000;
+    el.dataset.age = h < 3 ? "fresh" : h < 8 ? "ok" : h < 24 ? "stale" : "old";
+    t.textContent = clockOf(s.generated_at) + " · " + ago(Date.now() - new Date(s.generated_at).getTime());
+  }
+
+  function paintVerdict(s) {
+    var f = s.free_to_sell, alarms = [];
+    if (!f) {
+      $("freeNum").textContent = "—";
+      $("freeSub").textContent = "Gummy pouches unreadable in this snapshot.";
+    } else {
+      var el = $("freeNum");
+      el.textContent = n(f.free);
+      el.classList.toggle("neg", f.free < 0);
+      $("freeSub").textContent = "pouches · " + n(f.reserve) +
+        " held for subscriber rebills to " + day(f.until);
+      if (f.sold_out) {
+        alarms.push(["", "SOLD OUT",
+          "at or below the " + n((s.model || {}).free_alert_pouches) + "-pouch trigger"]);
+      }
+      if (f.cut_ads) alarms.push(["warn", "CUT ADS", "paid pool " + n(f.ads_free)]);
+      if (!alarms.length) alarms.push(["calm", "CLEAR", Math.round(f.days) + " days of new-order cover"]);
+    }
+    $("alarms").innerHTML = alarms.map(function (a) {
+      return '<div class="alarm ' + a[0] + '"><span class="mk">' + esc(a[1]) +
+        '</span><span>' + esc(a[2]) + '</span></div>';
+    }).join("");
+  }
+
+  function paintStats(s) {
+    var d = s.demand || {}, items = s.items || [];
+    var payable = items.filter(function (i) { return i.pay_by && !i.muted; });
+    var over = payable.filter(function (i) { return i.days_to_pay_by < 0; });
+    var next = payable.slice().sort(function (a, b) { return a.pay_by < b.pay_by ? -1 : 1; })[0];
+
+    var t2 = over.length
+      ? { v: Math.abs(over.reduce(function (a, b) {
+            return a.days_to_pay_by < b.days_to_pay_by ? a : b; }).days_to_pay_by) + "d late",
+          hot: true, s: "overdue" }
+      : next ? { v: day(next.pay_by), hot: false, s: "in " + next.days_to_pay_by + "d" }
+             : { v: "—", hot: false, s: "none due" };
+
+    $("stats").innerHTML =
+      '<div><p class="lab">Burn</p><p class="v num">' + (d.avg7_pouches || 0) +
+        '<span style="font-size:12px;color:var(--mut)">/d</span></p><small>28d ' +
+        (d.avg28_pouches || 0) + '</small></div>' +
+      '<div><p class="lab">Next pay</p><p class="v num' + (t2.hot ? " hot" : "") + '">' +
+        esc(t2.v) + '</p><small>' + esc(t2.s) + '</small></div>' +
+      '<div><p class="lab">Overdue</p><p class="v num' + (over.length ? " hot" : "") + '">' +
+        over.length + '</p><small>' + (over.length
+          ? esc(over.map(function (i) { return i.sku.replace("CHEWY-", ""); }).join(", "))
+          : "none") + '</small></div>';
+  }
+
+  function itemHTML(i) {
+    if (i.missing) {
+      return '<details class="item" data-s="UNKNOWN"><summary>' +
+        '<div class="left"><b>?</b><span>' + esc(i.label) + '</span></div>' +
+        '<div class="right"><p class="lab">status</p><em>unverified</em></div></summary></details>';
+    }
+    var out = (i.days_cover === null || i.days_cover === undefined)
+      ? "past 180d" : day(i.stockout);
+
+    var rows = [];
+    rows.push(["Burn", i.burn + "/day"]);
+    if (i.days_cover !== null && i.days_cover !== undefined) rows.push(["Cover", i.days_cover + " days"]);
+    if (i.on_hand !== i.available) rows.push(["At Floship", n(i.on_hand) + ", " + n(i.reserved) + " reserved"]);
+    if (i.held) rows.push(["Held back", n(i.held)]);
+    if (i.manual) rows.push(["Counted, not scanned", n(i.manual.packed) + " of " + n(i.manual.batch) + " packed"]);
+    if (i.pay_by) {
+      rows.push(["Pay by", day(i.pay_by) + (i.days_to_pay_by < 0
+        ? " (" + Math.abs(i.days_to_pay_by) + "d late)" : " (in " + i.days_to_pay_by + "d)")]);
+    }
+    if (i.suggested_qty) rows.push(["Suggested order", n(i.suggested_qty)]);
+    if (i.lead_days) rows.push(["Lead time", i.lead_days + "d" + (i.lead_assumed ? ", assumed" : "")]);
+    if (i.pull && i.pull.hit) rows.push([null, "At the pull-from-site floor. Remove it from the website."]);
+    if (i.muted) rows.push([null, "Alerts muted for this item."]);
+    if (i.held_note) rows.push([null, "Held: " + esc(i.held_note)]);
+
+    return '<details class="item" data-s="' + esc(i.status) + '"><summary>' +
+      '<div class="left"><b>' + n(i.available) + '</b><span>' + esc(i.label) + '</span></div>' +
+      '<div class="right"><p class="lab">' + (i.manual ? "runs out" : "out") + '</p><em>' +
+        esc(out) + '</em></div></summary>' +
+      '<dl class="detail">' + rows.map(function (r) {
+        return r[0] === null ? '<dd class="note">' + r[1] + '</dd>'
+          : '<dt>' + esc(r[0]) + '</dt><dd>' + r[1] + '</dd>';
+      }).join("") + '</dl></details>';
+  }
+
+  function paintItems(s) {
+    var items = s.items || [];
+    $("list").innerHTML = items.map(itemHTML).join("");
+    var red = items.filter(function (i) { return i.status === "RED"; }).length;
+    $("stockNote").textContent = red ? red + " red" : items.length + " items";
+  }
+
+  function paintIncoming(s) {
+    var rows = s.incoming || [];
+    if (!rows.length) {
+      $("inbound").innerHTML = '<p class="empty">Nothing on the way.</p>';
+      $("inNote").textContent = "";
+      return;
+    }
+    var groups = [], byDate = {};
+    rows.forEach(function (r) {
+      if (!byDate[r.eta]) { byDate[r.eta] = []; groups.push(r.eta); }
+      byDate[r.eta].push(r);
+    });
+    $("inbound").innerHTML = groups.map(function (eta) {
+      var lines = byDate[eta];
+      return '<div class="grp"><div class="when"><b>' + esc(day(eta)) + '</b><span>' +
+        esc(inDays(lines[0].days)) + '</span></div>' +
+        lines.map(function (r) {
+          var tail = r.kind === "hold" ? '<i> back from repackaging</i>'
+            : r.eta_source === "derived" ? '<i> est.</i>'
+            : r.lead_assumed ? '<i> assumed lead</i>' : "";
+          return '<div class="ln"><b>' + n(r.qty) + '</b><span>' + esc(r.label) + tail + '</span></div>';
+        }).join("") + '</div>';
+    }).join("");
+    $("inNote").textContent = groups.length + (groups.length === 1 ? " arrival" : " arrivals");
+  }
+
+  function paintTail(s) {
+    var d = s.drift || [];
+    $("drift").innerHTML = d.length
+      ? '<div class="drift"><span class="mk">DRIFT</span><span>' +
+        esc(d.map(function (x) { return String(x).split(":")[0]; }).join(", ")) +
+        ': Floship on-hand has not moved but Shopify sold through. Counts may be wrong.</span></div>'
+      : "";
+    var sub = s.subscribers || {};
+    var caveats = [];
+    if (s.drift_checked === false) caveats.push("drift not checked, no recent history");
+    if (s.sub_schedule === "flat rate") caveats.push("rebills on the flat rate, no export loaded");
+    if (sub.export_age_days >= 7) caveats.push("subscriber export " + sub.export_age_days + "d old");
+    $("foot").innerHTML = n(sub.active) + " subscribers · " +
+      n(sub.rebill_pouches_14d) + " rebill pouches due in 14 days<br>" +
+      "Floship stock + Shopify orders, pulled live. Read-only view of the stock engine." +
+      (caveats.length ? "<br>" + esc(caveats.join(" · ")) : "");
+  }
+
+  var shown = null;
+  function render(s) {
+    if (!s || !s.items) return;
+    if (shown && shown.generated_at > s.generated_at) return;
+    shown = s;
+    paintStamp(s); paintVerdict(s); paintStats(s); paintItems(s); paintIncoming(s); paintTail(s);
+  }
+
+  render(SEED);
+  setInterval(function () { if (shown) paintStamp(shown); }, 60000);
+
+  var api = (typeof window !== "undefined" && window.claude) || null;
+  if (!api || typeof api.use !== "function") return;
+  api.use("db").then(function (db) {
+    if (!db) return;
+    db.doc("stock/latest").onSnapshot(function (snap) {
+      if (snap.exists) render(snap.data());
+    }, function () {});
+  }).catch(function () {});
+})();
+</script>
+
+</body>
+</html>
